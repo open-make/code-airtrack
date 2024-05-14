@@ -1,13 +1,19 @@
 #import <Arduino.h>
 #include <Wire.h> // Need by sensor.h
 #include <SPI.h>
-#include <Pixy.h>
+#include <Pixy2.h>
+#include <Pixy2CCC.h>
 
 #include "definitions.h"
 #include "leds.h"
 #include "pins.h"
 #include "sensor.h"
 #include "actuator.h"
+
+// Use the test mode if you run the script for the first time
+boolean test_run = false; // Set true for testing
+
+Pixy2 pixy;
 
 const bool AUTOMATED_REWARD = false;
 const bool SINGLE_REWARD = true;
@@ -18,23 +24,41 @@ Sensor sensor = Sensor(Pins.Sensor);
 Actuator actuator = Actuator(Pins.ActuatorPush, Pins.ActuatorPull,
                              global_state.actuator_max_pwm_distance,
                              &global_state);
-Pixy pixy;
 
 // the setup routine runs once when you press reset:
+
 void setup()
 {
     Serial.begin(115200);
+    if (test_run) {
+        Serial.println("Start of the setup");
+    }
     sensor.setup();
+    if (test_run) {
+        Serial.println("Sensor MPR121 is set up");
+    }
     setupLeds();
+    if (test_run) {
+        Serial.println("Leds are set up");
+    }
     setupPins();
+    if (test_run) {
+        Serial.println("Pins is set up");
+    }
     setupLanes();
+    if (test_run) {
+        Serial.println("Lanes are configured");
+    }
     pixy.init();
-
+    if (test_run) {
+        Serial.println("PixyCam is set up");
+    }
+    
     for (int i = 0; i < global_state.MOTOR_DURATION_ENTERIES_SIZE; i++)
     {
         global_state.motor_duration_entries[i].activated = false;
     }
-
+    
     global_state.is_automated_reward = AUTOMATED_REWARD;
     global_state.trial_number = 0;
     global_state.was_inside_lane = false;
@@ -45,7 +69,9 @@ void setup()
 
     global_state.actuator_duration_activated = false;
     actuator.setup();
-
+    if (test_run) {
+        Serial.println("Actuator is set up");
+    }
     // We are seeding the random so it would give us reproducible results
     // randomSeed(0);// call randomSeed(analogRead(A3)) for random order on each run
     randomSeed(analogRead(A3));
@@ -58,10 +84,12 @@ void setup()
     makeNewRewardLane();
 }
 
-
 // the loop routine runs over and over again forever:
 void loop()
-{
+{   
+    if (test_run) {
+        Serial.println("Main loop starts");
+    }
     SubjectLocation subject_location = getSubjectLocation();
     if (subject_location.block_detected)
     {
@@ -76,10 +104,12 @@ void loop()
     bool is_inside_lane = isInsideLane(subject_location);
 
     bool motor_pushed = false;
+    
+    SensorTouched touched_sensor = SensorTouched(0, 0);//sensor.readInput();
+    
 
-    SensorTouched touched_sensor = sensor.readInput();
-
-    // Serial.print("We are within reward lane");
+    //Serial.print("We are within reward lane");
+    //Serial.print( " loop is inside lane ");
     if (is_inside_lane)
     {
         if (!global_state.was_inside_lane)
@@ -153,6 +183,7 @@ void loop()
                 }
             }
         }
+        
         else
         {
             // Count that it's a bad trial
@@ -163,6 +194,7 @@ void loop()
         }
         //Serial.println("");
     }
+    
     else // Outside a lane
     {
         if (global_state.was_inside_lane)
@@ -184,7 +216,7 @@ void loop()
         global_state.was_inside_lane = false;
         global_state.reported_motor_max_distance = false;
     }
-
+    
     if (subject_location.block_detected && !motor_pushed)
     {
         actuator.setState(Actuator::PULL);
@@ -194,10 +226,11 @@ void loop()
             global_state.last_reported_actuator_status = Actuator::PULL;
         }
     }
-
+    
     global_state.was_inside_lane = is_inside_lane;
     turnOffMotor();
     actuator.motorLoop();
+    
 }
 
 bool isInsideLane(SubjectLocation subject_location)
@@ -281,18 +314,26 @@ bool shouldTriggerMotor(SubjectLocation subject_location)
 
 SubjectLocation getSubjectLocation()
 {
-    uint16_t num_of_blocks = pixy.getBlocks();
+    //old: uint16_t num_of_blocks = pixy.getBlocks();
     //Serial.print("Pixy array size: ");
     //Serial.println(num_of_blocks);
+    uint16_t num_of_blocks = pixy.ccc.getBlocks();
+
+    //old: SubjectLocation location = SubjectLocation();
+    //old: location.block_detected = num_of_blocks == 1;
 
     SubjectLocation location = SubjectLocation();
-    location.block_detected = num_of_blocks == 1;
-
+    location.block_detected = num_of_blocks > 0;
+    
     if (location.block_detected)
     {
-        location.angle = pixy.blocks[0].angle;
-        location.x = pixy.blocks[0].x;
-        location.y = pixy.blocks[0].y;
+        //old: location.angle = pixy.blocks[0].angle;
+        //old: location.x = pixy.blocks[0].x;
+        //old: location.y = pixy.blocks[0].y;
+
+        location.angle = pixy.ccc.blocks[0].m_angle;
+        location.x = pixy.ccc.blocks[0].m_x;
+        location.y = pixy.ccc.blocks[0].m_y;
 
         const bool ENABLE_POSITION_PRINT = false;
         if (ENABLE_POSITION_PRINT)
@@ -304,7 +345,8 @@ SubjectLocation getSubjectLocation()
             Serial.print(" angle: ");
             Serial.print(location.angle);
             Serial.print(" NUm. of blocks: ");
-            Serial.println(num_of_blocks);
+            //old: Serial.println(num_of_blocks);
+            Serial.println(pixy.ccc.numBlocks);
         }
     }
 

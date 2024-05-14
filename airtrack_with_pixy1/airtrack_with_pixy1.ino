@@ -9,6 +9,9 @@
 #include "sensor.h"
 #include "actuator.h"
 
+// Use the test mode if you run the script for the first time
+boolean test_run = false; // Set true for testing
+
 const bool AUTOMATED_REWARD = false;
 const bool SINGLE_REWARD = true;
 const bool FEEDBACK_AUTOMATED_REWARD = false;
@@ -24,12 +27,30 @@ Pixy pixy;
 void setup()
 {
     Serial.begin(115200);
+    if (test_run) {
+        Serial.println("Start of the setup");
+    }
     sensor.setup();
+    if (test_run) {
+        Serial.println("Sensor MPR121 is set up");
+    }
     setupLeds();
+    if (test_run) {
+        Serial.println("Leds are set up");
+    }
     setupPins();
+    if (test_run) {
+        Serial.println("Pins is set up");
+    }
     setupLanes();
+    if (test_run) {
+        Serial.println("Lanes are configured");
+    }
     pixy.init();
-
+    if (test_run) {
+        Serial.println("PixyCam is set up");
+    }
+    
     for (int i = 0; i < global_state.MOTOR_DURATION_ENTERIES_SIZE; i++)
     {
         global_state.motor_duration_entries[i].activated = false;
@@ -45,7 +66,9 @@ void setup()
 
     global_state.actuator_duration_activated = false;
     actuator.setup();
-
+    if (test_run) {
+        Serial.println("Actuator is set up");
+    }
     // We are seeding the random so it would give us reproducible results
     // randomSeed(0);// call randomSeed(analogRead(A3)) for random order on each run
     randomSeed(analogRead(A3));
@@ -62,6 +85,9 @@ void setup()
 // the loop routine runs over and over again forever:
 void loop()
 {
+    if (test_run) {
+        Serial.println("Main loop starts");
+    }
     SubjectLocation subject_location = getSubjectLocation();
     if (subject_location.block_detected)
     {

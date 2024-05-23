@@ -1,3 +1,11 @@
+// Script to move the linear actuator in or out and to test if it is working
+//
+// Variables to change:
+// - actuatorMode to "PULL" or" PUSH"
+//
+// MOTOR_PUSH_PIN and MOTOR_PULL_PIN are right configured if you wired it as in the drawing of the guide
+// Pin 5 and 6 are via the H bridge connected with the linear actuator
+
 #import <Arduino.h>
 #include <Arduino.h>
 #include "pins.h" // Ensure pin.h is correctly configured to define PIN_TYPE and possibly the pins used.

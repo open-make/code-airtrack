@@ -1,3 +1,18 @@
+// Main script to run the experiment of the Paper Air-Track: a real-world floating environment for active sensing in head-fixed mice
+// A flow chart of the full process is displayed in the electronical part 4 (Link: https://open-make.github.io/airtrack-doc-website/code_usage.html)
+//
+// Reward lanes get randomly assigned at the beginning
+//
+//
+// Variables to change: 
+// Test mode can be activated by setting "test_run" to true
+// 
+//
+// Check definitions.h from line 94 ("static const long int SAME_SENSOR_MAX_THRESHOLD = 500;") on for defining the amout of recognized touches of the MPR121 to trigger or suppress 
+// 
+// Check definitions.h from line 114 ("DistancesStruct ()")on for defining the area of pixels to be inside a lane
+// 
+
 #import <Arduino.h>
 #include <Wire.h> // Need by sensor.h
 #include <SPI.h>

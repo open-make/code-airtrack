@@ -1,3 +1,4 @@
+// definition of further used pins
 #ifndef PINS_MODULE
 #define PINS_MODULE
 

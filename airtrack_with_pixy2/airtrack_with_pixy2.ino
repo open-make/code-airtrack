@@ -1,12 +1,25 @@
+
 // Main script to run the experiment of the Paper Air-Track: a real-world floating environment for active sensing in head-fixed mice
 // A flow chart of the full process is displayed in the electronical part 4 (Link: https://open-make.github.io/airtrack-doc-website/code_usage.html)
 //
-// Reward lanes get randomly assigned at the beginning
+// Reward lanes get randomly assigned at the beginning and within the experiment
 //
 //
 // Variables to change: 
-// Test mode can be activated by setting "test_run" to true
 // 
+//
+// Test mode can be activated by setting "test_run" to true
+// Activate autorewards by setting const bool AUTOMATED_REWARD = true; // if false, sensor touch required for rewards
+// Change to only use one solenoid by setting const bool SINGLE_REWARD = true; 
+// 
+//
+// 
+//
+// 
+//
+// 
+//
+// To work on: 
 //
 // Check definitions.h from line 94 ("static const long int SAME_SENSOR_MAX_THRESHOLD = 500;") on for defining the amout of recognized touches of the MPR121 to trigger or suppress 
 // 
@@ -28,13 +41,13 @@
 #include "actuator.h"
 
 // Use the test mode if you run the script for the first time
-boolean test_run = false; // Set true for testing
+boolean test_run = true; // Set true for testing
 
 Pixy2 pixy;
 
-const bool AUTOMATED_REWARD = false;
-const bool SINGLE_REWARD = true;
-const bool FEEDBACK_AUTOMATED_REWARD = false;
+const bool AUTOMATED_REWARD = true; // note true auto rewards, false sensor touch required for rewards
+const bool SINGLE_REWARD = true; // note true if only one solenoid used
+const bool FEEDBACK_AUTOMATED_REWARD = false; 
 
 GlobalState global_state;
 Sensor sensor = Sensor(Pins.Sensor);

@@ -15,8 +15,8 @@ struct Sensor
 
   public:
 
-    CONST_PIN_TYPE LEFT_ANALOUGE_PIN = 9;
-    CONST_PIN_TYPE RIGHT_ANALOUGE_PIN = 2;
+    CONST_PIN_TYPE LEFT_ANALOUGE_PIN = 4;
+    CONST_PIN_TYPE RIGHT_ANALOUGE_PIN = 5;
 
 
     Sensor (PIN_TYPE sensor_interrupt_pin)

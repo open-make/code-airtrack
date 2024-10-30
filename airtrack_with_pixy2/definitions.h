@@ -115,9 +115,9 @@ struct DistancesStruct
     {
         this->x_threshold_min = 100;
         this->x_threshold_max = 350;
-        this->y_threshold_min = 2;
-        this->y_threshold_max = 90;
-        this->y_motor_threshold = 35;
+        this->y_threshold_min = 45;
+        this->y_threshold_max = 190;
+        this->y_motor_threshold = 115;
     }
 } Distances;
 

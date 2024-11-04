@@ -9,9 +9,12 @@
 // 
 //
 // Test mode can be activated by setting "test_run" to true
+
 // Activate autorewards by setting const bool AUTOMATED_REWARD = true; // if false, sensor touch required for rewards
+
 // Change to only use one solenoid by setting const bool SINGLE_REWARD = true; 
-// 
+
+// To configure the MPR121 thresholds adjust:       "#define NEW_TOU_THRESH 0x02" and "#define NEW_REL_THRESH 0x35" in the sensor.h
 //
 // 
 //
@@ -21,7 +24,7 @@
 //
 // To work on: 
 //
-// Check definitions.h from line 94 ("static const long int SAME_SENSOR_MAX_THRESHOLD = 500;") on for defining the amout of recognized touches of the MPR121 to trigger or suppress 
+// Check definitions.h from line 94 ("static const long int SAME_SENSOR_MAX_THRESHOLD = 500;") on for defining the amout of recognized touches of the MPR121 to trigger or suppress - why also this measure
 // 
 // Check definitions.h from line 114 ("DistancesStruct ()")on for defining the area of pixels to be inside a lane
 // 

@@ -1,3 +1,8 @@
+// To adjust the MPR121 thresholds, change      #define NEW_TOU_THRESH 0x02 and #define NEW_REL_THRESH 0x35
+
+// Thresholds are 
+
+
 #ifndef SENSOR_MODULE
 #define SENSOR_MODULE
 
@@ -132,8 +137,8 @@ struct Sensor
       // Section C - Sets touch and release thresholds for each electrode
       // #define NEW_TOU_THRESH TOU_THRESH // 0x10
       // #define NEW_REL_THRESH REL_THRESH // 0x02
-      #define NEW_TOU_THRESH 0x02
-      #define NEW_REL_THRESH 0x35
+      #define NEW_TOU_THRESH 0x38
+      #define NEW_REL_THRESH 0x75
 
       set_register(0x5A, ELE0_T, NEW_TOU_THRESH);
       set_register(0x5A, ELE0_R, NEW_REL_THRESH);

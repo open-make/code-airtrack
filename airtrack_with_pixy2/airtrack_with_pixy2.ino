@@ -44,7 +44,7 @@
 #include "actuator.h"
 
 // Use the test mode if you run the script for the first time
-boolean test_run = true; // Set true for testing
+boolean test_run = false; // Set true for testing
 
 Pixy2 pixy;
 
